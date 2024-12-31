@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIK Classes - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- For FontAwesome icons -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fc;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        .header {
+            display: flex;
+            align-items: center; /* Align items vertically in the header */
+            justify-content: flex-start; /* Align logo and title to the left */
+            padding: 10px 20px; /* Reduced padding for smaller height */
+            background-color: #4CAF50;
+            color: white;
+            position: relative;
+            height: 50px; /* Reduced height for a smaller status bar */
+        }
+
+        /* Circular Logo styling */
+        .logo {
+            width: 40px; /* Adjust logo size */
+            height: 40px;
+            margin-right: 10px; /* Space between the logo and title */
+            border-radius: 50%; /* Circular shape */
+            overflow: hidden; /* Ensure the image fits within the circle */
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure the image covers the circle */
+        }
+
+        .logo-text {
+            font-size: 24px; /* Logo text size */
+            font-weight: bold;
+            word-wrap: break-word;
+        }
+
+        /* Thought of the Day (quote) box styling */
+        #quote {
+            font-size: 20px;
+            color: #333;
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 3px solid #4CAF50;
+            position: relative;
+        }
+
+        #quote:before {
+            content: "“";
+            font-size: 60px;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            color: #4CAF50;
+        }
+
+        #quote:after {
+            content: "”";
+            font-size: 60px;
+            position: absolute;
+            bottom: -10px;
+            right: 10px;
+            color: #4CAF50;
+        }
+
+        .main-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .features {
+            font-size: 18px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        /* Profile icon and welcome message styling */
+        .profile-container {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%); /* Ensure it stays centered */
+        }
+
+        #profile-icon {
+            width: 30px; /* Smaller size for the profile icon */
+            height: 30px; /* Smaller size for the profile icon */
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        #profile-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        #user-welcome {
+            font-size: 14px;
+            color: white;
+        }
+
+        /* Homework Section */
+        .homework-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            position: relative; /* Enable positioning of children relative to this container */
+        }
+
+        .add-homework-btn {
+            font-size: 30px;
+            background-color: #f0940a;
+            color: white;
+            border-radius: 50%;
+            border: none;
+            padding: 15px; /* Equal padding to ensure a circular shape */
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px; /* Ensure equal width and height for perfect circle */
+            height: 60px; /* Ensure equal width and height for perfect circle */
+            display: flex;
+            align-items: center; /* Center the + icon vertically */
+            justify-content: center; /* Center the + icon horizontally */
+        }
+
+        .homework-list {
+            margin-top: 20px;
+        }
+
+        .homework-item {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between; /* Make space for delete button */
+            align-items: center;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Modal for Homework */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .modal input,
+        .modal select,
+        .modal textarea,
+        .modal button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .modal button {
+            background-color: #86dd0b;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal button:hover {
+            background-color: #45a049;
+        }
+        /* Taskbar styling */
+        .taskbar {
+            display: flex;
+            justify-content: center;
+            background-color: #333;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .status-bar-item {
+            padding: 0 15px;
+        }
+
+        .status-bar-item a {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+        }
+
+        .status-bar-item a:hover {
+            color: #4CAF50;
+        }
+
+        @media (max-width: 600px) {
+            /* Adjust the font size of the logo and quote for mobile screens */
+            .logo-text {
+                font-size: 22px;
+            }
+
+            #quote {
+                font-size: 16px;
+            }
+
+            #user-welcome {
+                font-size: 12px;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            text-align: center;
+            margin: 50px auto;
+        }
+        .upload-icon {
+            font-size: 50px;
+            cursor: pointer;
+            color: #4caf50;
+        }
+        .modall {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modall-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .file-input {
+            margin: 15px 0;
+        }
+        .close-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-btn {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .file-preview {
+            margin-top: 20px;
+        }
+        .file-preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        .file-preview a {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .uploaded-files {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0 20px;
+        }
+        .file-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #fff;
+            text-align: center;
+            margin-bottom: 20px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%; 
+            max-width: 400px; 
+            position: relative;
+        }
+        .file-item img {
+            max-width: 100%;
+            max-height: 150px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        .file-item a {
+            margin-top: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .file-item a:hover {
+            text-decoration: underline;
+        }
+        .delete-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #f44336;
+            cursor: pointer;
+        }
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #f3f3f3;
+            height: 10px;
+            margin-top: 20px;
+            display: none; 
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #4caf50;
+            transition: width 0.3s;
+        }
+        .full-width-iframe {
+  width: 100%;
+  height: 100vh; /* Adjust height as needed */
+  border: none;
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <!-- Circular Logo beside the title -->
+        <div class="logo">
+            <img src="default-profile.jpg" alt="KIK Classes Logo">
+        </div>
+        <div class="logo-text">KIK Classes</div>
+
+        <!-- Profile container with the profile icon and welcome message -->
+        <div class="profile-container">
+            <div id="profile-icon">
+                <img src="default-profile.jpg" alt="Profile Icon" id="profile-image">
+            </div>
+            <span id="user-welcome">Welcome, User!</span>
+        </div>
+    </div>
+
+    <!-- Thought of the Day (quote) box -->
+    <div id="quote" class="quote">Loading quote...</div>
+
+    <!-- Homework Section -->
+    <div class="homework-section">
+        <h2>Homework</h2>
+        <button class="add-homework-btn" id="add-homework-btn"><i class="fa-solid fa-plus"></i></button>
+        <div class="homework-list" id="homework-list">
+            <!-- Homework items will be added here -->
+        </div>
+    </div>
+
+    <!-- Modal for Adding Homework -->
+    <div class="modal" id="homework-modal">
+        <div class="modal-content">
+            <h3>Add Homework</h3>
+            <label for="subject">Select Subject:</label>
+            <select id="subject">
+                <option value="science">Science</option>
+                <option value="maths">Maths</option>
+                <option value="sst">SST</option>
+                <option value="hindi">Hindi</option>
+                <option value="english">English</option>
+            </select>
+            <label for="homework-details">Homework Details:</label>
+            <textarea id="homework-details" rows="4"></textarea>
+            <label for="file-attachment">Attach File <i class="fa-solid fa-paperclip"></i> (Optional):</label>
+            <input type="file" id="file-attachment">
+            <label for="passcode">Enter Passcode:</label>
+            <input type="password" id="passcode" placeholder="Enter Passcode">
+            <button id="submit-homework">Submit Homework</button>
+            <button id="close-modal">Cancel</button>
+        </div>
+    </div>
+
+    <iframe src="hw.html" frameborder="0" class="full-width-iframe"></iframe>
+
+    
+    <!-- Taskbar with icons -->
+    <div class="taskbar">
+        <div class="status-bar-item"><a href="INDEX.HTML"><i class="fas fa-house"></i></a></div>
+        <div class="status-bar-item"><a href="chat.html"><i class="fas fa-comment"></i></a></div>
+        <div class="status-bar-item"><a href="s_material.html"><i class="fas fa-book"></i></a></div>
+        <div class="status-bar-item"><a href="https://www.youtube.com/@KIK_CLASSES"><i class="fa-brands fa-youtube"></i></a></div>
+        <div class="status-bar-item"><a href="contact.html"><i class="fa-solid fa-phone"></i></a></div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  
+      // Firebase configuration
+      const firebaseConfig = {
+          apiKey: "AIzaSyCYY2GQqS0tCXb7Oxw8AWXhpexq9e8VRUs",
+          authDomain: "aspirehub-32863.firebaseapp.com",
+          projectId: "aspirehub-32863",
+          storageBucket: "aspirehub-32863.appspot.com",
+          messagingSenderId: "686810111182",
+          appId: "1:686810111182:web:4290b4b1b6e64934ec449f",
+          measurementId: "G-KX41R0SSMY"
+      };
+  
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app); // Initialize Firestore
+      const auth = getAuth(app); // Initialize Auth
+  
+      // Manual list of 10 motivational quotes
+      const quotes = [
+          "The only way to do great work is to love what you do. - Steve Jobs",
+          "Success is not the key to happiness. Happiness is the key to success. - Albert Schweitzer",
+          "Believe you can and you're halfway there. - Theodore Roosevelt",
+          "Don't watch the clock; do what it does. Keep going. - Sam Levenson",
+          "Your time is limited, so don’t waste it living someone else’s life. - Steve Jobs",
+          "The harder you work for something, the greater you’ll feel when you achieve it. - Anonymous",
+          "Dream it. Wish it. Do it. - Anonymous",
+          "It’s not whether you get knocked down, it’s whether you get up. - Vince Lombardi",
+          "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+          "Success is the sum of small efforts, repeated day in and day out. - Robert Collier"
+      ];
+  
+      // Function to get the current quote index based on time
+      function getQuoteIndex() {
+          const lastQuoteChange = localStorage.getItem("lastQuoteChange");
+          const currentTime = new Date().getTime();
+  
+          // If it's been 12 hours or more, change the quote
+          if (!lastQuoteChange || currentTime - lastQuoteChange >= 12 * 60 * 60 * 1000) {
+              localStorage.setItem("lastQuoteChange", currentTime);
+              return Math.floor(Math.random() * quotes.length); // Get a random quote index
+          }
+  
+          // Otherwise, show the same quote as the last time
+          return localStorage.getItem("lastQuoteIndex");
+      }
+  
+      // Function to set the current quote
+      function setQuote() {
+          const index = getQuoteIndex();
+          document.getElementById("quote").textContent = quotes[index];
+          localStorage.setItem("lastQuoteIndex", index); // Store the current quote index
+      }
+  
+      // Call setQuote on page load
+      setQuote();
+  
+      // Homework Modal and button
+      const addHomeworkBtn = document.getElementById("add-homework-btn");
+      const homeworkModal = document.getElementById("homework-modal");
+      const closeModalBtn = document.getElementById("close-modal");
+      const submitHomeworkBtn = document.getElementById("submit-homework");
+      const subjectInput = document.getElementById("subject");
+      const detailsInput = document.getElementById("homework-details");
+      const fileInput = document.getElementById("file-attachment");
+      const passcodeInput = document.getElementById("passcode");
+      const homeworkList = document.getElementById("homework-list");
+  
+      // Open the modal when "+" button is clicked
+      addHomeworkBtn.addEventListener("click", () => {
+          homeworkModal.style.display = "block";
+      });
+  
+      // Close the modal when cancel is clicked
+      closeModalBtn.addEventListener("click", () => {
+          homeworkModal.style.display = "none";
+      });
+  
+      // Submit Homework to Firestore
+      submitHomeworkBtn.addEventListener("click", async () => {
+          const subject = subjectInput.value;
+          const details = detailsInput.value;
+          const file = fileInput.files[0]; // Optional file
+          const passcode = passcodeInput.value;
+  
+          if (passcode === "9090") {
+              try {
+                  // Add homework to Firestore
+                  await addDoc(collection(db, "homework"), {
+                      subject,
+                      details,
+                      file: file ? file.name : "",
+                      timestamp: new Date()
+                  });
+  
+                  alert("Homework added successfully!");
+                  homeworkModal.style.display = "none"; // Close modal after submission
+                  loadHomework(); // Reload homework list
+              } catch (error) {
+                  alert("Error adding homework: " + error.message);
+              }
+          } else {
+              alert("Incorrect passcode.");
+          }
+      });
+  
+      // Function to load Homework
+      async function loadHomework() {
+          const q = query(collection(db, "homework"), orderBy("timestamp", "desc"));
+          const querySnapshot = await getDocs(q);
+          homeworkList.innerHTML = ""; // Clear existing homework list
+  
+          querySnapshot.forEach((docSnapshot) => {
+              const homeworkData = docSnapshot.data();
+              const homeworkId = docSnapshot.id;
+              const homeworkElement = document.createElement("div");
+              homeworkElement.classList.add("homework-item");
+  
+              homeworkElement.innerHTML = `
+                  <div>
+                      <strong>Subject:</strong> ${homeworkData.subject}<br>
+                      <strong>Details:</strong> ${homeworkData.details}<br>
+                      ${homeworkData.file ? `<strong>Attachment:</strong> ${homeworkData.file}` : ""}
+                  </div>
+                  <button class="delete-btn" data-id="${homeworkId}">Delete</button>
+              `;
+  
+              const deleteBtn = homeworkElement.querySelector(".delete-btn");
+              deleteBtn.addEventListener("click", async (e) => {
+                  const homeworkId = e.target.dataset.id;
+                  const passcode = prompt("Enter passcode to delete homework:");
+  
+                  if (passcode === "9090") {
+                      try {
+                          // Ensure `doc()` is used correctly
+                          const homeworkDocRef = doc(db, "homework", homeworkId); // Correctly reference the document
+                          await deleteDoc(homeworkDocRef); // Delete the homework document
+                          alert("Homework deleted successfully!");
+                          loadHomework(); // Reload homework list after deletion
+                      } catch (error) {
+                          alert("Error deleting homework: " + error.message);
+                      }
+                  } else {
+                      alert("Incorrect passcode.");
+                  }
+              });
+  
+              homeworkList.appendChild(homeworkElement);
+          });
+      }
+  
+      // Load homework when the page is loaded
+      window.onload = loadHomework;
+  
+      // Authentication
+      onAuthStateChanged(auth, (user) => {
+          if (user) {
+              // Display user name
+              document.getElementById("user-welcome").innerText = ` ${user.displayName || user.email}`;
+              // Set the profile image if the user is logged in via Google
+              const userProfileImage = user.photoURL || "default-profile.jpg";  // default if no profile image
+              document.getElementById("profile-image").src = userProfileImage;
+  
+              // Add event listener for profile icon click to redirect to profile page
+              document.getElementById("profile-icon").addEventListener("click", () => {
+                  window.location.href = "profile.html";
+              });
+          } else {
+              // User is not logged in
+              alert("Please login to access this page.");
+              window.location.href = "login.html";
+          }
+      });
+
+      // bawwaaaalllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+
+      
+  </script>
+  
+
+
+    
+</body>
+
+</html>

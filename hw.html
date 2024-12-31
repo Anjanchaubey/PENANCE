@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Study Materials</title>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Font Awesome for the trash icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            text-align: center;
+            margin: 50px auto;
+        }
+        .upload-icon {
+            font-size: 50px;
+            cursor: pointer;
+            color: #4caf50;
+        }
+        .modall {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modall-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .file-input {
+            margin: 15px 0;
+        }
+        .close-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-btn {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .file-preview {
+            margin-top: 20px;
+        }
+        .file-preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        .file-preview a {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .uploaded-files {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0 20px;
+        }
+        .file-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #fff;
+            text-align: center;
+            margin-bottom: 20px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%; 
+            max-width: 400px; 
+            position: relative;
+        }
+        .file-item img {
+            max-width: 100%;
+            max-height: 150px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        .file-item a {
+            margin-top: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .file-item a:hover {
+            text-decoration: underline;
+        }
+        .delete-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #f44336;
+            cursor: pointer;
+        }
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #f3f3f3;
+            height: 10px;
+            margin-top: 20px;
+            display: none; 
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #4caf50;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Study Materials</h1>
+        <div>
+            <i class="upload-icon" id="upload-icon"><i class="fa-solid fa-circle-arrow-up"></i></i>
+        </div>
+    </div>
+
+    <!-- modall -->
+    <div class="modall" id="upload-modall">
+        <div class="modall-content">
+            <h2>Upload a File</h2>
+            <input type="file" class="file-input" id="file-input">
+            <br>
+            <button class="upload-btn" id="upload-btn">Upload</button>
+            <button class="close-btn" id="close-btn">Cancel</button>
+            <!-- Progress bar -->
+            <div class="progress-bar-container" id="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display Uploaded Files -->
+    <div class="uploaded-files" id="uploaded-files"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCYY2GQqS0tCXb7Oxw8AWXhpexq9e8VRUs",
+            authDomain: "aspirehub-32863.firebaseapp.com",
+            projectId: "aspirehub-32863",
+            storageBucket: "aspirehub-32863.appspot.com",
+            messagingSenderId: "686810111182",
+            appId: "1:686810111182:web:4290b4b1b6e64934ec449f",
+            measurementId: "G-KX41R0SSMY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Get elements
+        const uploadIcon = document.getElementById("upload-icon");
+        const uploadmodall = document.getElementById("upload-modall");
+        const closemodallBtn = document.getElementById("close-btn");
+        const uploadBtn = document.getElementById("upload-btn");
+        const fileInput = document.getElementById("file-input");
+        const filePreview = document.getElementById("file-preview");
+        const uploadedFilesDiv = document.getElementById("uploaded-files");
+        const progressBarContainer = document.getElementById("progress-bar-container");
+        const progressBar = document.getElementById("progress-bar");
+
+        // Open modall on upload icon click
+        uploadIcon.addEventListener("click", () => {
+            uploadmodall.style.display = "flex";
+            filePreview.innerHTML = ''; 
+        });
+
+        // Close modall
+        closemodallBtn.addEventListener("click", () => {
+            uploadmodall.style.display = "none";
+        });
+
+        // Display file preview
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0];
+            filePreview.innerHTML = ''; 
+
+            if (file) {
+                const fileName = document.createElement("p");
+                fileName.textContent = `File: ${file.name}`;
+                filePreview.appendChild(fileName);
+
+                const fileType = file.type.split('/')[0]; 
+
+                if (fileType === 'image') {
+                    const img = document.createElement("img");
+                    img.src = URL.createObjectURL(file);
+                    filePreview.appendChild(img);
+                }
+
+                if (file.type === 'application/pdf') {
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(file);
+                    link.textContent = "Click to view PDF";
+                    link.target = "_blank";
+                    filePreview.appendChild(link);
+                }
+
+                if (file.type === 'application/vnd.android.package-archive') {
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(file);
+                    link.textContent = "Click to download APK";
+                    filePreview.appendChild(link);
+                }
+            }
+        });
+
+        // Upload file
+        uploadBtn.addEventListener("click", async () => {
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            try {
+                const storageRef = ref(storage, `studyMaterials/${file.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                // Show the progress bar when the upload starts
+                progressBarContainer.style.display = "block";
+
+                // Track upload progress
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        progressBar.style.width = `${progress}%`; 
+                    },
+                    (error) => {
+                        console.error("Upload failed:", error);
+                        alert("Failed to upload file: " + error.message);
+                        progressBarContainer.style.display = "none"; 
+                    },
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        console.log("File available at", downloadURL);
+
+                        await addDoc(collection(db, "studyMaterials"), {
+                            fileName: file.name,
+                            downloadURL,
+                            timestamp: new Date(),
+                        });
+
+                        alert("File uploaded successfully!");
+                        progressBarContainer.style.display = "none"; 
+                        loadUploadedFiles();
+                    }
+                );
+            } catch (error) {
+                alert("Error uploading file: " + error.message);
+                progressBarContainer.style.display = "none"; 
+            }
+        });
+
+        // Load uploaded files from Firestore
+        async function loadUploadedFiles() {
+            uploadedFilesDiv.innerHTML = ''; 
+            const querySnapshot = await getDocs(collection(db, "studyMaterials"));
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const fileItem = document.createElement("div");
+                fileItem.classList.add("file-item");
+
+                // Display images as thumbnails
+                if (data.fileName.match(/\.(jpeg|jpg|png)$/)) {
+                    const img = document.createElement("img");
+                    img.src = data.downloadURL;
+                    fileItem.appendChild(img);
+                }
+
+                // Display PDF file links
+                if (data.fileName.match(/\.pdf$/)) {
+                    const link = document.createElement("a");
+                    link.href = data.downloadURL;
+                    link.textContent = data.fileName;
+                    link.target = "_blank"; 
+                    fileItem.appendChild(link);
+                }
+
+                // Display APK file links
+                if (data.fileName.match(/\.apk$/)) {
+                    const link = document.createElement("a");
+                    link.href = data.downloadURL;
+                    link.textContent = "Download APK: " + data.fileName;
+                    fileItem.appendChild(link);
+                }
+
+                // Add delete icon with passcode verification
+                const deleteIcon = document.createElement("i");
+                deleteIcon.classList.add("fa-solid", "fa-trash", "delete-icon");
+                deleteIcon.addEventListener("click", () => {
+                    const passcode = prompt("Enter passcode to delete this file:");
+                    if (passcode === "9090") {
+                        deleteFile(doc.id, data.fileName);
+                    } else {
+                        alert("Incorrect passcode.");
+                    }
+                });
+
+                fileItem.appendChild(deleteIcon);
+                uploadedFilesDiv.appendChild(fileItem);
+            });
+        }
+
+        // Delete file from Firebase Storage and Firestore
+        async function deleteFile(fileId, fileName) {
+            try {
+                const fileRef = ref(storage, `studyMaterials/${fileName}`);
+                await deleteObject(fileRef); // Delete from storage
+
+                const fileDoc = doc(db, "studyMaterials", fileId);
+                await deleteDoc(fileDoc); // Delete from Firestore
+
+                alert("File deleted successfully!");
+                loadUploadedFiles(); // Refresh the list
+            } catch (error) {
+                console.error("Error deleting file:", error);
+                alert("Failed to delete the file.");
+            }
+        }
+
+        // Load files initially
+        loadUploadedFiles();
+    </script>
+</body>
+</html>

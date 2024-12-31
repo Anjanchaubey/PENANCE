@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>Contact Form - Kesari Institution of Knowledge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #605b5b;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        form {
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 2vw 4vw;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form h3 {
+            color: #333;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form input,
+        form textarea {
+            border: 0;
+            margin: 10px 0;
+            padding: 20px;
+            outline: none;
+            background: #f5f5f5;
+            font-size: 16px;
+        }
+
+        form button {
+            padding: 15px;
+            background: #4CAF50;
+            color: #fff;
+            font-size: 18px;
+            border: 0;
+            outline: none;
+            cursor: pointer;
+            width: 150px;
+            margin: 20px auto 0;
+            border-radius: 30px;
+        }
+
+        .status-bar {
+    background-color: #2196F3;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.status-bar-item {
+    display: inline-block;
+    margin: 0 20px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.status-bar-item:hover {
+    color: #1e88e5;
+}
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    
+<div class="container">
+    <form action="https://api.web3forms.com/submit" method="POST">
+        <h3><u>Get In Touch With</u> <br>Kesari Institution of Knowledge</h3><hr>
+        
+        <input type="hidden" name="access_key" value="a2b159f8-7962-4235-8afe-04c7c98dd483">
+        <input type="text" id="name" name="name" placeholder="Your Name" required>
+        <input type="email" id="email" name="email" placeholder="Email Address" required>
+        <input type="text" id="phone" name="phone" placeholder="Phone Number" required>
+        <textarea id="message" rows="4" name="message" placeholder="How can we help you?" required></textarea>
+        <div class="h-captcha" data-captcha="true"></div>
+        <button type="submit">Send</button>
+    </form>
+</div>
+<div class="status-bar">
+    <div class="status-bar-item"><a href="INDEX.HTML"><i class="fas fa-house"></i></a></div>
+        <div class="status-bar-item"><a href="chat.html"><i class="fas fa-comment"></i></a></div>
+        <div class="status-bar-item"><a href="s_material.html"><i class="fas fa-book"></i></a></div>
+        <div class="status-bar-item"><a href="https://www.youtube.com/@KIK_CLASSES"><i class="fa-brands fa-youtube"></i></a></div>
+        <div class="status-bar-item"><a href="contact.html"><i class="fa-solid fa-phone"></i></a></div>
+</div>
+<script src="https://web3forms.com/client/script.js" async defer></script>
+
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .profile-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .profile-image {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .edit-btn, .save-btn {
+            padding: 12px 25px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .edit-btn:hover, .save-btn:hover {
+            background-color: #004d99;
+        }
+
+        .loading-spinner {
+            display: none;
+            margin: 20px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .profile-edit-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .input-field, .file-input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .file-input {
+            padding: 5px;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .logout-btn:hover {
+            background-color: darkred;
+        }
+
+        .profile-edit-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Cropper modal styles */
+        /* Cropper modal styles */
+.cropper-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it appears on top of other content */
+}
+
+.cropper-container {
+    background-color: white;
+    padding: 20px;
+    max-width: 100%;
+    max-height: 90%; /* Limit height to 90% of the viewport */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#crop-image {
+    width: 100%;
+    max-width: 100%; /* Ensures the image fits within the modal */
+    max-height: 400px; /* Limit the max height */
+}
+
+    </style>
+
+    <!-- Include Cropper.js CSS and JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+</head>
+<body>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <img src="images/default-profile-pic.jpg" alt="Profile Picture" class="profile-image" id="profile-image">
+            <div class="profile-info">
+                <h1 id="username-display">User Name</h1>
+                <p id="email-display">Email</p>
+                <p id="join-date">Join Date</p>
+            </div>
+        </div>
+
+        <!-- Edit Profile Button -->
+        <button class="edit-btn" id="edit-btn">Edit Profile</button>
+
+        <!-- Profile Edit Section -->
+        <div class="profile-edit-section" id="profile-edit-section">
+            <input type="text" class="input-field" id="new-username" placeholder="Enter new username">
+            <input type="file" class="file-input" id="file-input" accept="image/*">
+            <button class="save-btn" id="save-changes-btn">Save Changes</button>
+            <div class="loading-spinner" id="loading-spinner"></div>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="logout-btn" id="logout-btn">Logout</button>
+    </div>
+
+    <!-- Cropper Modal -->
+    <div class="cropper-modal" id="cropper-modal">
+        <div class="cropper-container">
+            <img id="crop-image" src="" alt="Image for cropping">
+            <button id="crop-save-btn">Save Cropped Image</button>
+        </div>
+    </div>
+
+    <!-- Firebase App and Auth SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCYY2GQqS0tCXb7Oxw8AWXhpexq9e8VRUs",
+            authDomain: "aspirehub-32863.firebaseapp.com",
+            projectId: "aspirehub-32863",
+            storageBucket: "aspirehub-32863.appspot.com",
+            messagingSenderId: "686810111182",
+            appId: "1:686810111182:web:4290b4b1b6e64934ec449f",
+            measurementId: "G-KX41R0SSMY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+        let cropper;
+
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('username-display').innerText = user.displayName || 'User Name';
+                document.getElementById('email-display').innerText = user.email;
+                document.getElementById('join-date').innerText = new Date(user.metadata.creationTime).toLocaleDateString();
+                document.getElementById('profile-image').src = user.photoURL || 'https://via.placeholder.com/100';
+            } else {
+                window.location.href = 'login.html'; // Redirect to login page if no user
+            }
+        });
+
+        // Toggle edit profile section
+        document.getElementById('edit-btn').addEventListener('click', () => {
+            const editSection = document.getElementById('profile-edit-section');
+            editSection.style.display = (editSection.style.display === 'none' || editSection.style.display === '') ? 'block' : 'none';
+        });
+
+        // Handle image selection and cropper modal
+        document.getElementById('file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const image = document.getElementById('crop-image');
+                    image.src = event.target.result;
+
+                    document.getElementById('cropper-modal').style.display = 'flex';
+
+                    image.onload = function () {
+                        if (cropper) cropper.destroy();
+                        cropper = new Cropper(image, {
+                            aspectRatio: 1, // Square aspect ratio
+                            viewMode: 1,
+                            scalable: true,
+                            zoomable: true,
+                        });
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Save cropped image and upload to Firebase
+        document.getElementById('crop-save-btn').addEventListener('click', () => {
+            const canvas = cropper.getCroppedCanvas();
+            canvas.toBlob((blob) => {
+                const user = auth.currentUser;
+                const storageRef = ref(storage, `profile-pictures/${user.uid}`);
+                uploadBytes(storageRef, blob).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((downloadURL) => {
+                        updateProfile(user, { photoURL: downloadURL }).then(() => {
+                            document.getElementById('profile-image').src = downloadURL;
+                            document.getElementById('cropper-modal').style.display = 'none';
+                        });
+                    });
+                });
+            });
+        });
+
+        // Save profile changes
+        document.getElementById('save-changes-btn').addEventListener('click', () => {
+            const newUsername = document.getElementById('new-username').value;
+            const user = auth.currentUser;
+
+            document.getElementById('loading-spinner').style.display = 'block';
+
+            if (user) {
+                if (newUsername.trim() === "") {
+                    alert("Username cannot be empty.");
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    return;
+                }
+
+                updateProfile(user, { displayName: newUsername }).then(() => {
+                    document.getElementById('username-display').innerText = newUsername;
+                    alert("Profile updated successfully!");
+                    document.getElementById('profile-edit-section').style.display = 'none';
+                    document.getElementById('loading-spinner').style.display = 'none';
+                }).catch((error) => {
+                    console.error("Error updating profile: ", error);
+                    alert("Failed to update profile.");
+                    document.getElementById('loading-spinner').style.display = 'none';
+                });
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = 'login.html';  // Redirect to login page after logout
+            }).catch((error) => {
+                console.error("Logout failed: ", error);
+            });
+        });
+    </script>
+
+</body>
+</html>

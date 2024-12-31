@@ -1,0 +1,518 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #ffffff; /* Light background */
+    color: #333333; /* Dark text for readability */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Header Styling */
+.header {
+    width: 100%;
+    background-color: #1DA1F2; /* Twitter blue color */
+    color: white;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#username-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#profile-logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Floating Button */
+#add-Blast-button {
+    position: fixed;
+    bottom: 40px; /* Distance from the bottom */
+    right: 40px;  /* Distance from the right */
+    background-color: #1DA1F2; /* Twitter blue color */
+    border: none;
+    color: white;
+    font-size: 40px; /* Size of the "+" icon */
+    padding: 15px;
+    width: 60px; /* Width of the button */
+    height: 60px; /* Height of the button */
+    border-radius: 50%; /* Circular button */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Soft shadow around button */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+    display: flex;
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    z-index: 100; /* Ensure it's on top of other content */
+}
+
+#add-Blast-button:hover {
+    background-color: #0a84c1; /* Slightly darker blue on hover */
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+#add-Blast-button:active {
+    transform: scale(0.9); /* Slight shrink effect when clicked */
+}
+
+#add-Blast-button span {
+    font-weight: bold;
+}
+
+/* Blast Box Styling */
+#Blast-box {
+    width: 100%;
+    height: 100vh;
+    margin-top: 0;
+    background-color: #f5f5f5; /* Light background for the Blast container */
+    border-radius: 0;
+    padding: 20px;
+    box-shadow: none;
+    overflow-y: auto;
+}
+
+/* Individual Blast Styling */
+.Blast {
+    background-color: #ffffff; /* White background for individual Blast */
+    border: 1px solid #ccc; /* Light border for separation */
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Style for the Blast text */
+.Blast-text {
+    font-size: 16px;
+    color: #333333; /* Dark text for readability */
+    margin-top: 10px;
+}
+
+/* Style for user info */
+.user {
+    font-weight: bold;
+    font-size: 14px;
+    color: #1DA1F2; /* Twitter blue color */
+}
+
+/* Timestamp style */
+.timestamp {
+    font-size: 12px;
+    color: #888; /* Light gray color for timestamp */
+    margin-top: 10px;
+}
+
+/* Style for media container */
+.media-container {
+    margin-top: 15px;
+}
+
+.media-container img, .media-container video {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+/* Blast Popup Styling */
+.Blast-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    z-index: 200;
+    overflow-y: auto;
+    padding: 40px;
+}
+
+.Blast-popup textarea {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: none;
+    margin-bottom: 20px;
+    background-color: #ffffff; /* Light background for text area */
+    color: #333333; /* Dark text */
+    box-sizing: border-box;
+}
+
+.Blast-popup button {
+    background-color: #1DA1F2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.Blast-popup button:hover {
+    background-color: #0a84c1;
+}
+
+/* Attach file button */
+#file-button {
+    background-color: #f662f8;
+    color: #f3f7f9;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#file-button:hover {
+    background-color: #e1e8ed;
+}
+
+/* File Input (Hidden) */
+#file-input {
+    display: none;
+}
+
+/* Cancel Blast Button */
+#cancel-Blast-button {
+    background-color: #f5f5f5; /* Light background */
+    color: #1DA1F2; /* Twitter blue text */
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+#cancel-Blast-button:hover {
+    background-color: #e1e8ed; /* Light gray on hover */
+}
+
+/* Blast Box Styling */
+.Blast-box {
+    padding: 20px;
+    background-color: #f5f5f5; /* Light background color */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Individual Blast styles */
+.Blast {
+    background-color: #ffffff; /* White background for Blast */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Media container styles */
+.media-container img, .media-container video {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .Blast-popup {
+        width: 80%;
+        padding: 25px;
+    }
+
+    .floating-button {
+        font-size: 35px;
+        padding: 12px;
+    }
+
+    .Blast-text {
+        font-size: 16px;
+    }
+}
+
+@media(max-width: 480px) {
+    .Blast-popup {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .floating-button {
+        font-size: 30px;
+        padding: 10px;
+    }
+
+    .Blast-text {
+        font-size: 14px;
+    }
+
+    .menu {
+        font-size: 18px;
+    }
+
+    .user {
+        font-size: 16px;
+    }
+
+    #profile-logo {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Header Styling */
+.header {
+    width: 100%;
+    background-color: #1DA1F2; /* Twitter blue */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: 50px; /* Reduced height */
+    font-family: Arial, sans-serif;
+    font-size: 16px; /* Slightly smaller font */
+}
+
+/* Segments for Chat and Blast */
+.header-section {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0; /* Smaller padding */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+/* Highlight active or hover sections */
+.header-section.active {
+    background-color: rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 -2px 0 white; /* Underline effect */
+}
+
+.header-section:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Light hover effect */
+}
+
+/* Profile Section */
+#profile-container {
+    position: absolute;
+    right: 15px;
+    top: 5px; /* Adjusted for smaller header */
+}
+
+#profile-logo {
+    width: 35px; /* Smaller profile image */
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+}
+
+/* Anchor Styling */
+.header a {
+    text-decoration: none;
+    color: white; /* Changed to white for consistency */
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+
+.header a.active {
+    font-weight: bold;
+    color: white;
+    border-bottom: 2px solid white;
+}
+
+.header a:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Media Container Styling */
+.media-container {
+    max-width: 100%; /* Ensures media does not overflow */
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Image Styling */
+.media-container img {
+    max-width: 300px; /* Limit the width of the uploaded image */
+    max-height: 200px; /* Limit the height for consistent sizing */
+    object-fit: cover; /* Ensure the image scales proportionally */
+    border-radius: 8px; /* Optional: rounded corners for a polished look */
+    border: 1px solid #ccc; /* Optional: border around the image */
+}
+
+/* Video Styling (if needed) */
+.media-container video {
+    max-width: 300px;
+    max-height: 200px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    object-fit: cover;
+}
+
+#clear-chat-button {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    margin: 0;
+}
+
+#clear-chat-button:hover {
+    background-color: #e60000;
+}
+/* Style for PDF download link */
+.media-container a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    border: 7PX solid rgb(216, 237, 19);
+    background-color: rgb(216, 237, 19);
+}
+
+.media-container a:hover {
+    text-decoration: underline;
+}
+/* Progress Bar Styles */
+#progress-container {
+    width: 100%;
+    height: 10px;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0;
+    background-color: #4caf50;
+    border-radius: 5px;
+    transition: width 0.3s ease-in-out;
+}
+/* Add styles for the like button */
+.like-button {
+    cursor: pointer;
+    color: #007bff;
+}
+
+/* Styles for comment input popup */
+.comment-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.comment-popup textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.comment-popup button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.comment-popup button:hover {
+    background-color: #0056b3;
+}
+.comments-section {
+    margin-top: 10px;
+    padding-left: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.comment {
+    margin-bottom: 10px;
+}
+
+.comment-user {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.comment-text {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.comment-timestamp {
+    font-size: 12px;
+    color: #888;
+}
+/* General Styles for Buttons */
+button {
+    font-family: Arial, sans-serif;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+button:focus {
+    outline: none;
+}
+
