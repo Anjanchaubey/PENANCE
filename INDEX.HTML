@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kesari Institution of Knowledge</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            padding: 50px 0;
+            background-color: #4CAF50;
+            color: white;
+        }
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .quote {
+            font-size: 24px;
+            font-style: italic;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .about {
+            text-align: center;
+            padding: 30px;
+        }
+        .teacher {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .location {
+            color: #666;
+        }
+        .status-bar {
+    background-color: #2196F3;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.status-bar-item {
+    display: inline-block;
+    margin: 0 20px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.status-bar-item:hover {
+    color: #1e88e5;
+}
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: 300PX;
+            margin: 0 10px;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+        .homework-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.homework-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 5px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.homework-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.homework-content li {
+    margin-bottom: 15px;
+    padding-left: 25px;
+    position: relative;
+    font-size: 18px;
+    color: #555;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    font-family: cursive;
+}
+
+.homework-content li:before {
+    content: "\2022"; /* Bullet character */
+    color: #2196F3; /* Bullet color */
+    font-weight: bold;
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+    top: 6px;
+    transition: all 0.3s ease;
+}
+
+.homework-content li:hover {
+    transform: translateX(5px);
+    color: crimson;
+}
+
+.homework-content li:hover:before {
+    transform: scale(1.2);
+    color: crimson;
+}
+
+.tomorrow-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.tomorrow-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.tomorrow-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tomorrow-content li {
+    margin-bottom: 15px;
+    padding-left: 25px;
+    position: relative;
+    font-size: 18px;
+    color: #555;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    font-family: cursive;
+}
+
+.tomorrow-content li:before {
+    content: "\2022"; /* Bullet character */
+    color: #2196F3; /* Bullet color */
+    font-weight: bold;
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+    top: 6px;
+    transition: all 0.3s ease;
+}
+
+.tomorrow-content li:hover {
+    transform: translateX(5px);
+    color: crimson;
+    font-family: cursive;
+}
+
+.tomorrow-content li:hover:before {
+    transform: scale(1.2);
+}
+#thought {
+        font-size: 20px;
+        margin: 20px;
+        color: red;
+        margin-bottom: 15px;
+    padding-left: 25px;
+    position: relative;
+    font-size: 18px;
+    color: #555;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    font-family: cursive;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">Kesari Institution of Knowledge</div>
+        <div class="quote">"Education is the passport to the future, for tomorrow belongs to those who prepare for it today." - Malcolm X</div>
+    </div>
+    <div class="about">
+        <p>Welcome to Kesari Institution of Knowledge, where education meets excellence.</p>
+        <p>Founded by <span class="teacher">Sunil Kesari</span>, our institution is dedicated to providing quality education and nurturing young minds to reach their full potential.</p>
+        <p>We are located in Pipra, East Champaran, where we strive to create a conducive learning environment for our students.</p>
+    </div>
+    
+
+    <div class="homework-container">
+        <div class="homework-title">THOUGHT OF THE DAY</div>
+        <div class="homework-content">
+            <div id="thought"></div>
+    <script>
+        function generateThought() {
+            const thoughts = [
+                "The only way to do great work is to love what you do. - Steve Jobs",
+                "In the middle of difficulty lies opportunity. - Albert Einstein",
+                "Believe you can and you're halfway there. - Theodore Roosevelt",
+                "Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill",
+                "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt",
+                "It does not matter how slowly you go as long as you do not stop. - Confucius",
+                "The best way to predict the future is to invent it. - Alan Kay"
+            ];
+    
+            // Get today's date
+            const today = new Date();
+            // Use the day of the month to select a thought
+            const index = today.getDate() % thoughts.length;
+            return thoughts[index];
+        }
+    
+        // Set thought on page load
+        document.getElementById("thought").innerText = generateThought();
+    </script>
+        </div>
+    </div>
+
+
+    <div class="homework-container">
+        <div class="homework-title">Homework</div>
+        <div class="homework-content">
+            <ul>
+                <li>NEW CHAPTER BEGINS</li>
+                <li> BIOLOGY - CONTROL AND COORDINATION  </li>
+                <li>THAT'S IT🤗</li>
+                <li>be ready!!!</li>
+                <!-- Add more tasks as needed -->
+            </ul>
+        </div>
+    </div>
+    
+    <div class="tomorrow-container">
+        <div class="tomorrow-title">What to Do Tomorrow</div>
+        <div class="tomorrow-content">
+            <ul>
+                <li>KAL KI BATEIN KAL HONGI 😊</li>
+              <li> stay updated</li>
+                <li> STAY HAPPY 😁</li>
+                <!-- Add more tasks as needed -->
+            </ul>
+        </div>
+    </div>
+    
+    
+    
+
+
+
+    <div class="status-bar">
+        <div class="status-bar-item"><a href='/'><i class="fas fa-house"></i></a></div>
+        <div class="status-bar-item"><a href='/cf'><i class="fa-solid fa-globe"></i></a></div>
+        <div class="status-bar-item"><a href='/sm'><i class="fas fa-book"></i></a></div>
+        <div class="status-bar-item"><a href="https://www.youtube.com/@KIK_CLASSES"><i class="fa-brands fa-youtube"></i></a></div>
+        <div class="status-bar-item"><a href='/contact'><i class="fa-solid fa-phone"></i></div></a>
+    </div>
+</body>
+</html>
