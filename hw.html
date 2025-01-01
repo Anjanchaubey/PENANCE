@@ -170,7 +170,64 @@ h3 {
     text-transform: uppercase; /* Optional: Capitalize the text */
 }
 
-    </style>
+    /* Container for uploaded files */
+    .file-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        justify-content: space-between;
+    }
+
+    .file-item img {
+        max-width: 100px;
+        max-height: 100px;
+        margin-right: 15px;
+    }
+
+    /* Download button style */
+    .download-btn {
+        background-color: white;
+        border: none;
+        color: rgb(38, 235, 20);
+        padding: 10px;
+        font-size: 30px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s;
+        margin-top: 20px;
+    }
+
+    /* Add Font Awesome icon inside the button */
+    .download-btn i {
+        margin-right: 5px;
+    }
+
+    /* Hover effect on download button */
+    .download-btn:hover {
+        background-color: #45a049;
+    }
+
+    /* Delete icon style */
+    .delete-icon {
+        margin-left: 10px;
+        cursor: pointer;
+        color: red;
+        font-size: 20px;
+    }
+
+    .delete-icon:hover {
+        color: darkred;
+    }
+</style>
+
+
+    
 </head>
 <body>
     <div class="container">
@@ -326,54 +383,86 @@ h3 {
         });
 
         // Load uploaded files from Firestore
-        async function loadUploadedFiles() {
-            uploadedFilesDiv.innerHTML = ''; 
-            const querySnapshot = await getDocs(collection(db, "studyMaterials"));
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const fileItem = document.createElement("div");
-                fileItem.classList.add("file-item");
+        // Load uploaded files from Firestore
+// Load uploaded files from Firestore
+async function loadUploadedFiles() {
+    uploadedFilesDiv.innerHTML = ''; 
+    const querySnapshot = await getDocs(collection(db, "studyMaterials"));
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const fileItem = document.createElement("div");
+        fileItem.classList.add("file-item");
 
-                // Display images as thumbnails
-                if (data.fileName.match(/\.(jpeg|jpg|png)$/)) {
-                    const img = document.createElement("img");
-                    img.src = data.downloadURL;
-                    fileItem.appendChild(img);
-                }
+        // Display images as thumbnails with a download button
+        if (data.fileName.match(/\.(jpeg|jpg|png)$/)) {
+            const img = document.createElement("img");
+            img.src = data.downloadURL;
+            fileItem.appendChild(img);
+            
+            // Add download button for image with icon
+            const downloadBtn = document.createElement("button");
+            downloadBtn.classList.add("download-btn");
+            const icon = document.createElement("i");
+            icon.classList.add("fa-solid", "fa-file-arrow-down");
+            downloadBtn.appendChild(icon);
 
-                // Display PDF file links
-                if (data.fileName.match(/\.pdf$/)) {
-                    const link = document.createElement("a");
-                    link.href = data.downloadURL;
-                    link.textContent = data.fileName;
-                    link.target = "_blank"; 
-                    fileItem.appendChild(link);
-                }
-
-                // Display APK file links
-                if (data.fileName.match(/\.apk$/)) {
-                    const link = document.createElement("a");
-                    link.href = data.downloadURL;
-                    link.textContent = "Download APK: " + data.fileName;
-                    fileItem.appendChild(link);
-                }
-
-                // Add delete icon with passcode verification
-                const deleteIcon = document.createElement("i");
-                deleteIcon.classList.add("fa-solid", "fa-trash", "delete-icon");
-                deleteIcon.addEventListener("click", () => {
-                    const passcode = prompt("Enter passcode to delete this file:");
-                    if (passcode === "9090") {
-                        deleteFile(doc.id, data.fileName);
-                    } else {
-                        alert("Incorrect passcode.");
-                    }
-                });
-
-                fileItem.appendChild(deleteIcon);
-                uploadedFilesDiv.appendChild(fileItem);
+            downloadBtn.addEventListener("click", () => {
+                const link = document.createElement("a");
+                link.href = data.downloadURL;
+                link.download = data.fileName; // Set filename for download
+                link.click(); // Trigger download
             });
+            fileItem.appendChild(downloadBtn);
         }
+
+        // Display PDF file name and the download button
+        if (data.fileName.match(/\.pdf$/)) {
+            const fileName = document.createElement("p");
+            fileName.textContent = data.fileName; // Display PDF name
+            fileItem.appendChild(fileName);
+
+            const downloadBtn = document.createElement("button");
+            downloadBtn.classList.add("download-btn");
+            const icon = document.createElement("i");
+            icon.classList.add("fa-solid", "fa-file-arrow-down");
+            downloadBtn.appendChild(icon);
+
+            downloadBtn.addEventListener("click", () => {
+                const link = document.createElement("a");
+                link.href = data.downloadURL;
+                link.download = data.fileName; // Set filename for download
+                link.click(); // Trigger download
+            });
+
+            fileItem.appendChild(downloadBtn);
+        }
+
+        // Display APK file links with a download button
+        if (data.fileName.match(/\.apk$/)) {
+            const link = document.createElement("a");
+            link.href = data.downloadURL;
+            link.textContent = "Download APK: " + data.fileName;
+            fileItem.appendChild(link);
+        }
+
+        // Add delete icon with passcode verification
+        const deleteIcon = document.createElement("i");
+        deleteIcon.classList.add("fa-solid", "fa-trash", "delete-icon");
+        deleteIcon.addEventListener("click", () => {
+            const passcode = prompt("Enter passcode to delete this file:");
+            if (passcode === "9090") {
+                deleteFile(doc.id, data.fileName);
+            } else {
+                alert("Incorrect passcode.");
+            }
+        });
+
+        fileItem.appendChild(deleteIcon);
+        uploadedFilesDiv.appendChild(fileItem);
+    });
+}
+
+
 
         // Delete file from Firebase Storage and Firestore
         async function deleteFile(fileId, fileName) {
