@@ -478,6 +478,74 @@ a:active {
     transform: scale(1); /* Remove enlargement on click */
 }
 
+ /* Popup Styles */
+ .popup {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* To make sure it's above other elements */
+        }
+
+        .popup-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .popup h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-unit span {
+            font-size: 2rem;
+            color: #000;
+        }
+
+        .time-unit p {
+            color: #777;
+        }
+
+        /* Close button style */
+        .close-btn {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e74c3c;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .close-btn:hover {
+            background-color: #c0392b;
+        }
+
 
     </style>
 </head>
@@ -501,7 +569,31 @@ a:active {
 
     <!-- Thought of the Day (quote) box -->
     <div id="quote" class="quote">Loading quote...</div>
-
+<!-- Countdown Popup -->
+<div class="popup" id="countdownPopup">
+    <div class="popup-content">
+        <h1>Your First Board Exam is in... <i class="fa-solid fa-skull" style="color: #f50505;"></i></h1>
+        <div class="countdown">
+            <div class="time-unit">
+                <span id="days">0</span>
+                <p>Days</p>
+            </div>
+            <div class="time-unit">
+                <span id="hours">0</span>
+                <p>Hours</p>
+            </div>
+            <div class="time-unit">
+                <span id="minutes">0</span>
+                <p>Minutes</p>
+            </div>
+            <div class="time-unit">
+                <span id="seconds">0</span>
+                <p>Seconds</p>
+            </div>
+        </div>
+        <button class="close-btn" id="closeBtn">Close</button>
+    </div>
+</div>
     <!-- Homework Section -->
     <div class="homework-section">
         <h2>Homework     <i class="fa-solid fa-book-open"></i></h2>
@@ -767,6 +859,58 @@ async function loadHomework() {
     </script>
   
 
+  <script>
+    // Set the date we're counting down to (15th February 2025)
+    const countDownDate = new Date("Feb 15, 2025 00:00:00").getTime();
+
+    // Check if the popup has been displayed recently (within 6 hours)
+    const lastPopupTime = localStorage.getItem("lastPopupTime");
+    const currentTime = new Date().getTime();
+    const popupInterval = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+
+    if (!lastPopupTime || (currentTime - lastPopupTime) >= popupInterval) {
+        // Show the popup after 1 second of loading
+        setTimeout(function() {
+            document.getElementById("countdownPopup").style.display = "flex";
+        }, 1000);
+    }
+
+    // Update the last displayed time
+    localStorage.setItem("lastPopupTime", currentTime);
+
+    // Close the popup when the close button is clicked
+    document.getElementById("closeBtn").addEventListener("click", function() {
+        document.getElementById("countdownPopup").style.display = "none";
+    });
+
+    // Update the countdown every 1 second
+    const x = setInterval(function() {
+
+        // Get current date and time
+        const now = new Date().getTime();
+
+        // Calculate the difference between now and the countdown date
+        const distance = countDownDate - now;
+
+        // Time calculations
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the results
+        document.getElementById("days").innerHTML = days;
+        document.getElementById("hours").innerHTML = hours;
+        document.getElementById("minutes").innerHTML = minutes;
+        document.getElementById("seconds").innerHTML = seconds;
+
+        // If the countdown is finished, display a message
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdownPopup").innerHTML = "<h1>Board Exam is here!</h1>";
+        }
+    }, 1000);
+</script>
 
     
 </body>
