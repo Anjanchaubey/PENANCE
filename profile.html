@@ -15,8 +15,8 @@
 
         .profile-container {
             width: 100%;
-            max-width: 800px;
-            margin: 40px auto;
+            max-width: 100%;
+            margin: 20px;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -25,6 +25,7 @@
 
         .profile-header {
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
@@ -32,13 +33,13 @@
 
         .profile-image {
             border-radius: 50%;
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             object-fit: cover;
         }
 
         .profile-info {
-            flex: 1;
+            text-align: center;
         }
 
         .profile-info h1 {
@@ -128,37 +129,72 @@
         }
 
         /* Cropper modal styles */
-        /* Cropper modal styles */
-.cropper-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Ensure it appears on top of other content */
-}
+        .cropper-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Ensure it appears on top of other content */
+        }
 
-.cropper-container {
-    background-color: white;
-    padding: 20px;
-    max-width: 100%;
-    max-height: 90%; /* Limit height to 90% of the viewport */
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        .cropper-container {
+            background-color: white;
+            padding: 20px;
+            max-width: 100%;
+            max-height: 90%; /* Limit height to 90% of the viewport */
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-#crop-image {
-    width: 100%;
-    max-width: 100%; /* Ensures the image fits within the modal */
-    max-height: 400px; /* Limit the max height */
-}
+        #crop-image {
+            width: 100%;
+            max-width: 100%; /* Ensures the image fits within the modal */
+            max-height: 400px; /* Limit the max height */
+        }
+
+        /* Mobile specific styles */
+        @media (max-width: 600px) {
+            .profile-container {
+                padding: 15px;
+            }
+
+            .profile-header {
+                align-items: center;
+                gap: 10px;
+            }
+
+            .profile-image {
+                width: 70px;
+                height: 70px;
+            }
+
+            .profile-info h1 {
+                font-size: 20px;
+            }
+
+            .edit-btn, .save-btn, .logout-btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .input-field, .file-input {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .loading-spinner {
+                width: 30px;
+                height: 30px;
+            }
+        }
 
     </style>
 
