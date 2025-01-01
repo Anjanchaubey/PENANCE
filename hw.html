@@ -27,6 +27,7 @@
             font-size: 50px;
             cursor: pointer;
             color: #4caf50;
+            
         }
         .modall {
             display: none;
@@ -47,8 +48,23 @@
             text-align: center;
         }
         .file-input {
-            margin: 15px 0;
-        }
+    width: 85%; /* Makes the file input responsive */
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ddd; /* Light border for subtle contrast */
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f9f9f9; /* Light background for the input */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Focus effect to highlight the input */
+.file-input:focus {
+    border-color: #4CAF50; /* Green border on focus */
+    background-color: #fff; /* White background on focus */
+    outline: none;
+}
+
         .close-btn {
             background-color: #f44336;
             color: white;
@@ -128,6 +144,7 @@
             height: 10px;
             margin-top: 20px;
             display: none; 
+            border-radius: 0cqmin;
         }
 
         .progress-bar {
@@ -136,6 +153,23 @@
             background-color: #4caf50;
             transition: width 0.3s;
         }
+
+        hr {
+    border: 0;
+    height: 2px;
+    background-color: #4CAF50; /* Green color for the line */
+    margin: 20px 0; /* Spacing around the line */
+}
+
+h3 {
+    font-size: 22px;
+    color: #333;
+    margin-left: 20px; /* Left margin for the header */
+    font-weight: 600; /* Slightly bolder font */
+    letter-spacing: 1px; /* Add a bit of space between letters */
+    text-transform: uppercase; /* Optional: Capitalize the text */
+}
+
     </style>
 </head>
 <body>
@@ -145,15 +179,15 @@
             <i class="upload-icon" id="upload-icon"><i class="fa-solid fa-circle-arrow-up"></i></i>
         </div>
     </div>
-
+<hr><h3>Uploaded items:</h3>
     <!-- modall -->
     <div class="modall" id="upload-modall">
         <div class="modall-content">
             <h2>Upload a File</h2>
             <input type="file" class="file-input" id="file-input">
             <br>
-            <button class="upload-btn" id="upload-btn">Upload</button>
-            <button class="close-btn" id="close-btn">Cancel</button>
+            <button class="upload-btn" id="upload-btn">Upload  <i class="fa-solid fa-circle-arrow-up"></i></button>
+            <button class="close-btn" id="close-btn">Cancel  <i class="fa-solid fa-circle-xmark"></i></button>
             <!-- Progress bar -->
             <div class="progress-bar-container" id="progress-bar-container">
                 <div class="progress-bar" id="progress-bar"></div>
