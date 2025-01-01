@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Fees - KIK Classes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .pay-info {
+            font-size: 18px;
+            color: #555;
+            text-align: center;
+        }
+        .upi-details {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .upi-details h2 {
+            color: #1d72b8;
+        }
+        .upi-number {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+        .payment-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 30px;
+            background-color: #1d72b8;
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 60%;
+        }
+        .payment-btn:hover {
+            background-color: #155d8d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Pay Your Fees</h1>
+    <p class="pay-info">Please use the following UPI number to pay your fees for the KIK Classes. Enter the amount and complete the payment through your preferred UPI app.</p>
+
+    <div class="upi-details">
+        <h2>UPI Payment Details</h2>
+        <p class="upi-number">8921740497</p>
+        <p class="pay-info">Make the payment using this UPI ID: <strong>8921740497</strong></p>
+        <p>After completing the payment, please make sure to save the payment receipt.</p>
+    </div>
+
+    <a href="upi://pay?pa=8921740497&pn=KIK%20Classes&mc=12345&tid=67890&url=https://kikclasses.com" class="payment-btn" target="_blank">
+        Pay Now
+    </a>
+</div>
+
+</body>
+</html>
