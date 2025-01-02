@@ -640,10 +640,11 @@ a:active {
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+       import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js';
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js';
+  import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js';
+  import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js';
+  import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging.js';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -657,10 +658,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+// Initialize Firebase App
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app); // Initialize Firestore
-const auth = getAuth(app); // Initialize Auth
-const storage = getStorage(app); // Initialize Firebase Storage
+
+// Now initialize other Firebase services with the app object
+const db = getFirestore(app);  // Firestore
+const auth = getAuth(app);      // Authentication
+const storage = getStorage(app);  // Firebase Storage
+
 
     
         // Manual list of 10 motivational quotes
@@ -856,10 +861,7 @@ async function loadHomework() {
         // bawwaaaalllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
   
         
-    </script>
-  
-
-  <script>
+    
     // Set the date we're counting down to (15th February 2025)
     const countDownDate = new Date("Feb 15, 2025 00:00:00").getTime();
 
@@ -910,9 +912,75 @@ async function loadHomework() {
             document.getElementById("countdownPopup").innerHTML = "<h1>Board Exam is here!</h1>";
         }
     }, 1000);
-</script>
 
+    // Import Firebase modules
     
+    
+    
+
+// Initialize Firebase
+ // Initialize Firebase app
+
+// Initialize Firebase Messaging (after the app is initialized)
+const messaging = getMessaging(app); // Now app is defined, and we can use it here
+
+// Request permission for notifications
+Notification.requestPermission()
+  .then(permission => {
+    if (permission === 'granted') {
+      return getToken(messaging); // Request the FCM token if permission is granted
+    } else {
+      throw new Error('Notification permission denied.');
+    }
+  })
+  .then(token => {
+    console.log('FCM Token:', token);
+    // TODO: Send token to server for storage or later use
+  })
+  .catch(error => {
+    console.error('Error getting permission or token:', error);
+  });
+
+
+   // Handle foreground messages
+// Handle foreground messages
+onMessage(messaging, payload => {
+  console.log('Message received in the foreground:', payload);
+  
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: payload.notification.icon || '/firebase-logo.png',  // Use a default icon if none is provided
+  };
+
+  if (Notification.permission === 'granted') {
+    new Notification(notificationTitle, notificationOptions);
+  } else {
+    console.error('Notification permission is not granted.');
+  }
+});
+
+
+
+console.log(Notification.permission);  // It should log 'granted'
+
+
+
+  </script>
+
+  <!-- Register Service Worker -->
+  <script>
+   if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then(function(registration) {
+      console.log('Service Worker registered with scope:', registration.scope);
+    })
+    .catch(function(error) {
+      console.error('Service Worker registration failed:', error);
+    });
+}
+
+  </script>
 </body>
 
 </html>
