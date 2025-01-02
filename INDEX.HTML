@@ -951,19 +951,21 @@ onMessage(messaging, payload => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: payload.notification.icon || '/firebase-logo.png',  // Use a default icon if none is provided
+    icon: payload.notification.icon || '/firebase-logo.png',
   };
 
   if (Notification.permission === 'granted') {
-    new Notification(notificationTitle, notificationOptions);
+    const notification = new Notification(notificationTitle, notificationOptions);
+
+    // Add click event listener to open your website when clicked
+    notification.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent the default action
+      window.open('https://kikclasses.netlify.app', '_blank'); // Open your website in a new tab
+    });
   } else {
     console.error('Notification permission is not granted.');
   }
 });
-
-
-
-console.log(Notification.permission);  // It should log 'granted'
 
 
 
